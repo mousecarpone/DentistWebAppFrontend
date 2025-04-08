@@ -5,8 +5,12 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import Appointments from "./pages/Appointments";
 import AppointmentConfirmation from "./pages/AppointmentConfirmation";
+import AppointmentCreate from "./pages/AppointmentCreate";
+import AppointmentEdit from "./pages/AppointmentEdit";
 import Documents from "./pages/Documents";
 import Messaging from "./pages/Messaging";
+import UserProfile from "./pages/UserProfile";
+import History from "./pages/History";
 
 function App() {
   return (
@@ -19,9 +23,13 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/appointments" element={<Appointments />} />
-          <Route path="/appointment-confirmation" element={<AppointmentConfirmation />} />
+          <Route path="/appointment/confirmation" element={<AppointmentConfirmation />} />
+          <Route path="/appointment/create" element={<AppointmentCreate />} />
+          <Route path="/appointment/edit/:id" element={<AppointmentEdit />} />
           <Route path="/documents" element={<Documents />} />
           <Route path="/inbox" element={<Messaging />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/history" element={<History />} />
         </Route>
       </Routes>
     </Router>

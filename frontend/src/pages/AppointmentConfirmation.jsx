@@ -51,7 +51,7 @@ function AppointmentConfirmation() {
     return (
         <div className="page-container">
             <Sidebar />
-            <div className="content">
+            <div className="dashboard-content">
                 <h1 className="page-title">Appointment Confirmed</h1>
                 <div className="confirmation-wrapper" style={{ maxWidth: "600px", margin: "0 auto" }}>
                     <p className="confirmation-text" style={{ fontSize: "18px", lineHeight: "1.6" }}>
