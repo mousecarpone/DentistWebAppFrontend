@@ -62,7 +62,7 @@ function Sidebar({ activePage }) {
           </NavLink>
         </li>
         <li>
-          <NavLink to="https://sandiegodental.securepayments.cardpointe.com/pay?" >
+          <NavLink to="https://sandiegodental.securepayments.cardpointe.com/pay?" target="_blank">
             <FaMoneyBill className="icon" /> Pay Bill
           </NavLink>
         </li>
