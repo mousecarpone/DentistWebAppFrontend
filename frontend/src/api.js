@@ -326,7 +326,7 @@ export const getPatientId = async () => {
 
 export const getPatientByUsername = async (username) => {
     const headers = getAuthHeaders();
-    const res = await axios.get(`${API_BASE_URL}/patients/by_username/${username}/`, { headers });
+    const res = await axios.get(`${API_BASE_URL}/users/patients/by_username/${username}/`, { headers });
     return res.data;
 };
   
@@ -335,7 +335,7 @@ export const updatePatient = async (id, data) => {
       "Content-Type": "application/json",
       ...getAuthHeaders(),
     };
-    const res = await axios.put(`${API_BASE_URL}/patients/${id}/`, data, { headers });
+    const res = await axios.patch(`${API_BASE_URL}/users/patients/${id}/`, data, { headers });
     return res.data;
 };
 
