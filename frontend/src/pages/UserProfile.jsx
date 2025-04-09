@@ -8,8 +8,17 @@ import { jwtDecode } from "jwt-decode";
 function UserProfile() {
   const [userData, setUserData] = useState({});
   const [editableFields, setEditableFields] = useState({
-    username: false
+    username: false,  
   });
+
+  // EDIT HERE TO ADD FIELDS :)
+  const fieldsConfig = [
+    {label: "Name",           key: "fullName",          editable: false,},
+    {label: "Username",       key: "username",          editable: true,},
+    {label: "Email",          key: "email",             editable: true,},
+    {label: "Phone Number",   key: "phone_number",      editable: true,},
+    {label: "Address",        key: "address",           editable: true,},
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +52,11 @@ function UserProfile() {
   const handleSave = async () => {
     try {
       await updateUser(userData.id, {
-        username: userData.username
+        // EDIT HERE TO ADD UPDATING FIELDS
+        username: userData.username,
+        email: userData.email,
+        phone_number: userData.phone_number,
+        address: userData.address,
       });
       alert("Profile updated successfully.");
     } catch (err) {
@@ -53,7 +66,7 @@ function UserProfile() {
   };
 
   const renderField = (label, value, fieldKey, editable = false) => (
-    <div className="appointment-info-grid">
+    <div className="appointment-info-grid" style={{ marginBottom: "1rem" }}>
       <div><strong>{label}:</strong></div>
       <div>
         {editableFields[fieldKey] ? (
@@ -87,24 +100,48 @@ function UserProfile() {
     <div className="page-container">
       <Sidebar activePage="profile" />
       <div className="dashboard-content">
-        <h1 className="page-title">My Profile</h1>
+        <h1 className="page-title">Update Info</h1>
 
         <div className="card" style={{ maxWidth: "600px", padding: "30px" }}>
-          {/* Name: read-only */}
-          {renderField("Name", `${userData.first_name || ""} ${userData.last_name || ""}`)}
+        <h2>Your Info</h2>
+          {fieldsConfig.map((field) => {
+            let valueToDisplay;
 
-          {/* Username: editable */}
-          {renderField("Username", userData.username, "username", true)}
+            if (field.key === "fullName") {
+              valueToDisplay = `${userData.first_name || ""} ${userData.last_name || ""}`.trim();
+            } else {
+              valueToDisplay = userData[field.key];
+            }
+
+            return (
+              <React.Fragment key={field.key}>
+                {renderField(
+                  field.label,
+                  valueToDisplay,
+                  field.key === "fullName" ? "" : field.key,
+                  field.editable
+                )}
+              </React.Fragment>
+            );
+          })}
+
+          <h2>Emergency Contact</h2>
+
 
           <div style={{ marginTop: "20px", textAlign: "center" }}>
             <button className="confirm-button" onClick={handleSave}>
               Save Changes
             </button>
           </div>
+
+
         </div>
       </div>
+
+      
     </div>
   );
+  
 }
 
 export default UserProfile;
