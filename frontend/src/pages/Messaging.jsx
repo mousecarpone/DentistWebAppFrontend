@@ -6,7 +6,6 @@ import "../styles/Portal.css";
 function Messaging() {
     const [messages, setMessages] = useState([]);
     
-    // Fetch unread messages (inbox)
     useEffect(() => {
         fetchMessages();
     }, []);
@@ -19,7 +18,7 @@ function Messaging() {
             });
             setMessages(response.data);
         } catch (error) {
-            console.error("❌ Error fetching messages:", error);
+            console.error("Error fetching messages:", error);
         }
     };
 
