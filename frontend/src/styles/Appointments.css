@@ -78,6 +78,18 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
+.modern-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
 .optional-text {
     font-weight: normal;
     font-size: 0.8rem;
@@ -194,7 +206,7 @@
     color: #888;
     margin-top: 10px;
 }
-  
+
 .appointment-info-grid {
     display: grid;
     grid-template-columns: auto 1fr;
