@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import axios from "axios";
 import "../styles/Portal.css";
+import { getUpcomingAppointments, getNotifications, getDentists } from "../api";
 
 function Dashboard() {
     const [appointment, setAppointment] = useState(null);
@@ -10,31 +10,25 @@ function Dashboard() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = localStorage.getItem("access");
-            if (!token) return;
-
-            const headers = { Authorization: `Bearer ${token}` };
-
             try {
-                const appRes = await axios.get("http://127.0.0.1:8000/appointments/upcoming/", { headers });
-                setAppointment(appRes.data[0] || null);
+                const appData = await getUpcomingAppointments();
+                setAppointment(appData[0] || null);
             } catch (err) {
-                console.error("❌ Failed to fetch upcoming appointments:", err);
+                console.error("☹ Failed to fetch upcoming appointments:", err);
             }
 
             try {
-                const notifRes = await axios.get("http://127.0.0.1:8000/notifications/", { headers });
-                setNotifications(notifRes.data.slice(0, 3));
+                const notifData = await getNotifications();
+                setNotifications(notifData.slice(0, 3));
             } catch (err) {
-                console.error("❌ Failed to fetch notifications:", err);
+                console.error("☹ Failed to fetch notifications:", err);
             }
 
             try {
-                const dentistRes = await axios.get("http://127.0.0.1:8000/users/dentists/", { headers });
-                console.log("Fetched dentists:", dentistRes.data);
-                setDentists(dentistRes.data);
+                const dentistData = await getDentists();
+                setDentists(dentistData);
             } catch (err) {
-                console.error("❌ Failed to fetch dentists:", err);
+                console.error("☹ Failed to fetch dentists:", err);
             }
         };
 

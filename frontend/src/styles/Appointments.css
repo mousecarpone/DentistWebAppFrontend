@@ -1,4 +1,3 @@
-/* General Card Step Styling */
 .card.step {
     padding: 25px;
     position: relative;
@@ -9,9 +8,8 @@
     justify-content: flex-start;
 }
 
-/* Numbered Step Circles */
 .step-number {
-    width: 40px; /* increased size */
+    width: 40px; 
     height: 40px;
     border-radius: 50%;
     background-color: #627761;
@@ -30,13 +28,11 @@
     background-color: #4CAF50;
 }
 
-/* Instructional Text */
 .instruction-text {
     margin-bottom: 15px;
     color: #555;
 }
 
-/* Selectable Buttons (Doctor, Time, Reasons) */
 .selectable-button, .doctor-select-button {
     padding: 12px 15px;
     border-radius: 8px;
@@ -57,7 +53,6 @@
     color: white;
 }
 
-/* Doctor Buttons with Pictures */
 .doctor-select-button {
     display: flex;
     flex-direction: column;
@@ -73,32 +68,16 @@
     object-fit: cover;
 }
 
-/* Two-column layout for general button groups */
 .actions-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns by default */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 10px;
 }
 
-/* Specifically three columns for appointment times */
 .actions-grid.times {
-    grid-template-columns: repeat(3, 1fr); /* explicitly three columns for time selection */
+    grid-template-columns: repeat(3, 1fr);
 }
 
-/* Modern Textarea for Notes */
-.modern-textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #bbb;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-
-/* Optional Text Styling */
 .optional-text {
     font-weight: normal;
     font-size: 0.8rem;
@@ -110,13 +89,12 @@
     align-items: center;
 }
 
-/* Confirm Appointment Button */
 .confirm-button-container {
     max-width: 1200px;
     margin-top: 20px;
-    padding-left: 0; /* ensure left alignment */
+    padding-left: 0; 
     display: flex;
-    justify-content: flex-start; /* clearly aligns left */
+    justify-content: flex-start; 
 }
 
 .confirm-button {
@@ -129,7 +107,6 @@
     font-weight: bold;
 }
 
-/* React Calendar Overall Styling */
 .react-calendar {
     width: 100%;
     border: none;
@@ -140,9 +117,8 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
-/* React Calendar Navigation (Month/Year Section) */
 .react-calendar__navigation {
-    background-color: #789178; /* clearly lighter green */
+    background-color: #789178; 
     border-radius: 10px 10px 0 0;
     margin-bottom: 0;
 }
@@ -154,10 +130,9 @@
 
 .react-calendar__navigation button:hover,
 .react-calendar__navigation button:focus {
-    background-color: #8ca48c; /* even lighter green on hover */
+    background-color: #8ca48c; 
 }
 
-/* React Calendar Tiles (Days) */
 .react-calendar__tile {
     background-color: #ffffff;
     color: #333;
@@ -170,14 +145,12 @@
     background-color: #a0b4a0;
 }
 
-/* Disabled (greyed out) tiles */
 .react-calendar__tile:disabled {
     background-color: #f5f5f5;
     color: #bbb;
     border-radius: 0;
 }
 
-/* Active selected date */
 .react-calendar__tile--active,
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
@@ -186,19 +159,53 @@
     border-radius: 6px;
 }
 
-/* Weekend dates */
 .react-calendar__month-view__days__day--weekend {
     color: #a5c4a5;
 }
 
-/* Bottom Edge of Calendar */
 .react-calendar__month-view {
     border-radius: 0 0 10px 10px;
 }
 
-
 .dashboard-sections, 
 .confirm-button-container {
     width: 100%;
-    max-width: 1200px; /* matches tile container width */
+    max-width: 1200px; 
 }
+
+.appointment-section {
+    margin-bottom: 40px;
+}
+  
+.appointment-section h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #4e5347;
+}
+  
+.appointments-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.past-note {
+    font-style: italic;
+    color: #888;
+    margin-top: 10px;
+}
+  
+.appointment-info-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 6px;
+    column-gap: 12px;
+    margin-bottom: 10px;
+}
+  
+.appointments-inner {
+    max-width: 1200px; 
+    margin-left: auto; 
+    margin-right: auto;
+}
+  

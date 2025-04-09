@@ -20,6 +20,7 @@ a npm {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -31,14 +32,12 @@ body {
   color: #798478;
 }
 
-/* Main container */
 .main-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Header */
 .header {
   display: flex;
   justify-content: space-between;
@@ -68,7 +67,6 @@ body {
   color: #F4F3EF;
 }
 
-/* Hero Section */
 .hero {
   text-align: center;
   padding: 100px 20px;
@@ -103,7 +101,6 @@ body {
   color: #F4F3EF;
 }
 
-/* Footer */
 .footer {
   background-color: #798478;
   color: #F4F3EF;

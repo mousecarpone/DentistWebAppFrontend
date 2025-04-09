@@ -21,7 +21,6 @@ function Index() {
       <section className="hero">
         <h2>Your Perfect Smile, Our Commitment</h2>
         <p>Experience the best dental care at Dental Studio.</p>
-        <button onClick={() => navigate("/appointment")}>Book an Appointment</button>
       </section>
 
       <footer className="footer">

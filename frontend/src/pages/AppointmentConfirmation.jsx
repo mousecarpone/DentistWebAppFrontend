@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import "../styles/Portal.css";
-import axios from "axios";
+import { getDentistById, getServiceById } from "../api";
 
 function AppointmentConfirmation() {
     const location = useLocation();
@@ -13,40 +13,35 @@ function AppointmentConfirmation() {
     const [serviceName, setServiceName] = useState(null);
 
     useEffect(() => {
-        const fetchDentistName = async () => {
+        const fetchInfo = async () => {
+          if (dentist) {
             try {
-                const token = localStorage.getItem("access");
-                const res = await axios.get(`http://127.0.0.1:8000/users/dentists/${dentist}/`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                const user = res.data.user;
-                const fullName = user.first_name || user.last_name
-                    ? `Dr. ${user.first_name} ${user.last_name}`.trim()
-                    : `Dr. ${user.username}`;
-                setDentistName(fullName);
+              const dentistData = await getDentistById(dentist);
+              const user = dentistData.user;
+              const fullName = user.first_name || user.last_name
+                ? `Dr. ${user.first_name} ${user.last_name}`.trim()
+                : `Dr. ${user.username}`;
+              setDentistName(fullName);
             } catch (err) {
-                console.error("Failed to fetch dentist name:", err);
-                setDentistName(`Dentist #${dentist}`);
+              console.error("Failed to fetch dentist name:", err);
+              setDentistName(`Dentist #${dentist}`);
             }
-        };
-
-        const fetchServiceName = async () => {
+          }
+      
+          if (reason) {
             try {
-                const token = localStorage.getItem("access");
-                const res = await axios.get("http://127.0.0.1:8000/appointments/services/", {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                const service = res.data.find(s => s.id === reason);
-                setServiceName(service ? service.name : `Service #${reason}`);
+              const service = await getServiceById(reason);
+              setServiceName(service ? service.name : `Service #${reason}`);
             } catch (err) {
-                console.error("Failed to fetch service name:", err);
-                setServiceName(`Service #${reason}`);
+              console.error("Failed to fetch service name:", err);
+              setServiceName(`Service #${reason}`);
             }
+          }
         };
-
-        if (dentist) fetchDentistName();
-        if (reason) fetchServiceName();
+      
+        fetchInfo();
     }, [dentist, reason]);
+      
 
     return (
         <div className="page-container">

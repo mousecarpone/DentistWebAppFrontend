@@ -10,7 +10,6 @@ import AppointmentEdit from "./pages/AppointmentEdit";
 import Documents from "./pages/Documents";
 import Messaging from "./pages/Messaging";
 import UserProfile from "./pages/UserProfile";
-import History from "./pages/History";
 
 function App() {
   return (
@@ -29,7 +28,6 @@ function App() {
           <Route path="/documents" element={<Documents />} />
           <Route path="/inbox" element={<Messaging />} />
           <Route path="/profile" element={<UserProfile />} />
-          <Route path="/history" element={<History />} />
         </Route>
       </Routes>
     </Router>
