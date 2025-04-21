@@ -12,7 +12,6 @@ import {
   getMessageById,
   refreshToken,
 } from "../api";
-import axios from "axios";
 
 const Messaging = () => {
   const [messages, setMessages] = useState([]);
@@ -30,38 +29,17 @@ const Messaging = () => {
     body: "",
   });
   const [error, setError] = useState("");
-  const [view, setView] = useState("inbox"); // "inbox" or "all"
+  const [view, setView] = useState("inbox");
 
-  // Fetch dentists and messages on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch dentists
-        try {
-          const dentistsData = await getDentists();
-          setDentists(dentistsData);
-        } catch (dentistErr) {
-          console.error("Failed to fetch dentists:", dentistErr);
-          setError("Could not load recipient list. Please try again.");
-        }
-
-        // Fetch messages
-        try {
-          const messagesData = await getMessages();
-          setMessages(messagesData);
-        } catch (messagesErr) {
-          console.error("Failed to fetch messages:", messagesErr);
-          setError("Could not load messages. Please try again.");
-        }
-
-        // Fetch inbox messages
-        try {
-          const inboxData = await getInboxMessages();
-          setInboxMessages(inboxData);
-        } catch (inboxErr) {
-          console.error("Failed to fetch inbox messages:", inboxErr);
-          setError("Could not load inbox messages. Please try again.");
-        }
+        const dentistsData = await getDentists();
+        setDentists(dentistsData);
+        const messagesData = await getMessages();
+        setMessages(messagesData);
+        const inboxData = await getInboxMessages();
+        setInboxMessages(inboxData);
       } catch (err) {
         handleError(err);
       }
@@ -69,12 +47,10 @@ const Messaging = () => {
     fetchData();
   }, []);
 
-  // Handle API errors (e.g., token expiration)
   const handleError = async (err) => {
-    if (err.response && err.response.status === 401) {
+    if (err.response?.status === 401) {
       try {
         await refreshToken();
-        // Retry the failed requests
         const dentistsData = await getDentists();
         setDentists(dentistsData);
         const messagesData = await getMessages();
@@ -82,7 +58,7 @@ const Messaging = () => {
         const inboxData = await getInboxMessages();
         setInboxMessages(inboxData);
         setError("");
-      } catch (refreshErr) {
+      } catch {
         setError("Session expired. Please log in again.");
       }
     } else if (err.code === "ERR_NETWORK") {
@@ -92,12 +68,14 @@ const Messaging = () => {
     }
   };
 
-  // Handle selecting a message to view
   const handleSelectMessage = async (message) => {
+    if (selectedMessage?.id === message.id) {
+      setSelectedMessage(null);
+      return;
+    }
     try {
       const messageData = await getMessageById(message.id);
       setSelectedMessage(messageData);
-      // Pre-fill the reply form subject with "Re: [original subject]"
       setReplyMessage({
         recipient_id: messageData.sender.id,
         subject: `Re: ${messageData.subject}`,
@@ -105,7 +83,6 @@ const Messaging = () => {
       });
       if (!messageData.is_read) {
         await updateMessage(message.id, { is_read: true });
-        // Refresh messages
         const messagesData = await getMessages();
         setMessages(messagesData);
         const inboxData = await getInboxMessages();
@@ -116,7 +93,6 @@ const Messaging = () => {
     }
   };
 
-  // Handle sending a new message
   const handleSendMessage = async (e) => {
     e.preventDefault();
     try {
@@ -132,16 +108,15 @@ const Messaging = () => {
     }
   };
 
-  // Handle replying to a message
   const handleReplyMessage = async (e) => {
     e.preventDefault();
     try {
       await replyToMessage(selectedMessage.id, {
         ...replyMessage,
-        recipient_id: selectedMessage.sender.id, // Use the sender's User ID
+        recipient_id: selectedMessage.sender.id,
       });
       setReplyMessage({ recipient_id: "", subject: "", body: "" });
-      setSelectedMessage(null); // Optionally close the reply section after sending
+      setSelectedMessage(null);
       const messagesData = await getMessages();
       setMessages(messagesData);
       const inboxData = await getInboxMessages();
@@ -152,7 +127,6 @@ const Messaging = () => {
     }
   };
 
-  // Handle deleting a message
   const handleDeleteMessage = async (messageId) => {
     try {
       await deleteMessage(messageId);
@@ -168,19 +142,15 @@ const Messaging = () => {
     }
   };
 
-  // Format date for display
-  const formatDate = (dateStr) => {
-    return new Date(dateStr).toLocaleString();
-  };
+  const formatDate = (dateStr) => new Date(dateStr).toLocaleString();
 
   return (
     <div className="portal-container">
       <Sidebar />
-      <div className="main-content">
-        <h2>Messaging</h2>
+      <div className="main-content dashboard-content">
+        <h1 className="page-title">Messaging</h1>
         {error && <div className="error-message">{error}</div>}
 
-        {/* View Toggle */}
         <div className="view-toggle">
           <button
             className={view === "inbox" ? "active" : ""}
@@ -196,12 +166,11 @@ const Messaging = () => {
           </button>
         </div>
 
-        {/* Message List */}
         <div className="message-list">
           <h3>{view === "inbox" ? "Unread Messages" : "All Messages"}</h3>
-          {messages.length === 0 && view === "all" && <p>No messages available.</p>}
-          {inboxMessages.length === 0 && view === "inbox" && <p>No unread messages.</p>}
-          {(view === "inbox" ? inboxMessages : messages).length > 0 && (
+          {(view === "inbox" ? inboxMessages : messages).length === 0 ? (
+            <p>{view === "inbox" ? "No unread messages." : "No messages available."}</p>
+          ) : (
             <table>
               <thead>
                 <tr>
@@ -214,104 +183,110 @@ const Messaging = () => {
               </thead>
               <tbody>
                 {(view === "inbox" ? inboxMessages : messages).map((message) => (
-                  <tr
-                    key={message.id}
-                    onClick={() => handleSelectMessage(message)}
-                    className={selectedMessage?.id === message.id ? "selected" : ""}
-                  >
-                    <td>{message.sender?.username || "Unknown"}</td>
-                    <td>{message.recipient?.username}</td>
-                    <td>{message.subject}</td>
-                    <td>{formatDate(message.created_at)}</td>
-                    <td>{message.is_read ? "Read" : "Unread"}</td>
-                  </tr>
+                  <React.Fragment key={message.id}>
+                    <tr
+                      onClick={() => handleSelectMessage(message)}
+                      className={selectedMessage?.id === message.id ? "selected" : ""}
+                    >
+                      <td>{message.sender?.username || "Unknown"}</td>
+                      <td>{message.recipient?.username}</td>
+                      <td>{message.subject}</td>
+                      <td>{formatDate(message.created_at)}</td>
+                      <td>{message.is_read ? "Read" : "Unread"}</td>
+                    </tr>
+                    {selectedMessage?.id === message.id && (
+                      <tr>
+                        <td colSpan={5}>
+                          <div className="message-details">
+                            <h3>Message Details</h3>
+                            <p><strong>From:</strong> {selectedMessage.sender?.username}</p>
+                            <p><strong>To:</strong> {selectedMessage.recipient?.username}</p>
+                            <p><strong>Subject:</strong> {selectedMessage.subject}</p>
+                            <p><strong>Date:</strong> {formatDate(selectedMessage.created_at)}</p>
+                            <p><strong>Body:</strong> {selectedMessage.body}</p>
+                            <button onClick={() => handleDeleteMessage(selectedMessage.id)}>
+                              Delete Message
+                            </button>
+
+                            <div className="reply-form">
+                              <h4>Reply</h4>
+                              <form onSubmit={handleReplyMessage}>
+                                <input
+                                  type="text"
+                                  value={replyMessage.subject}
+                                  onChange={(e) =>
+                                    setReplyMessage({
+                                      ...replyMessage,
+                                      subject: e.target.value,
+                                    })
+                                  }
+                                  placeholder="Subject"
+                                  required
+                                />
+                                <textarea
+                                  value={replyMessage.body}
+                                  onChange={(e) =>
+                                    setReplyMessage({
+                                      ...replyMessage,
+                                      body: e.target.value,
+                                    })
+                                  }
+                                  placeholder="Type your reply..."
+                                  required
+                                ></textarea>
+                                <button type="submit">Send Reply</button>
+                              </form>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
           )}
         </div>
 
-        {/* Message Details */}
-        {selectedMessage && (
-          <div className="message-details">
-            <h3>Message Details</h3>
-            <p><strong>From:</strong> {selectedMessage.sender?.username}</p>
-            <p><strong>To:</strong> {selectedMessage.recipient?.username}</p>
-            <p><strong>Subject:</strong> {selectedMessage.subject}</p>
-            <p><strong>Date:</strong> {formatDate(selectedMessage.created_at)}</p>
-            <p><strong>Body:</strong> {selectedMessage.body}</p>
-            <button onClick={() => handleDeleteMessage(selectedMessage.id)}>
-              Delete Message
-            </button>
-
-            {/* Reply Form */}
-            <div className="reply-form">
-              <h4>Reply</h4>
-              <form onSubmit={handleReplyMessage}>
-                <input
-                  type="text"
-                  value={replyMessage.subject}
-                  onChange={(e) =>
-                    setReplyMessage({
-                      ...replyMessage,
-                      subject: e.target.value,
-                    })
-                  }
-                  placeholder="Subject"
-                  required
-                />
-                <textarea
-                  value={replyMessage.body}
-                  onChange={(e) =>
-                    setReplyMessage({ ...replyMessage, body: e.target.value })
-                  }
-                  placeholder="Type your reply..."
-                  required
-                ></textarea>
-                <button type="submit">Send Reply</button>
-              </form>
-            </div>
+        {view === "inbox" && (
+          <div className="new-message-form">
+            <h3>Compose New Message</h3>
+            <form onSubmit={handleSendMessage}>
+              <select
+                value={newMessage.recipient_id}
+                onChange={(e) =>
+                  setNewMessage({ ...newMessage, recipient_id: e.target.value })
+                }
+                required
+              >
+                <option value="">Select Recipient</option>
+                {dentists.map((dentist) => (
+                  <option key={dentist.id} value={dentist.user.id}>
+                    {dentist.user.username} ({dentist.specialization})
+                  </option>
+                ))}
+              </select>
+              <input
+                type="text"
+                value={newMessage.subject}
+                onChange={(e) =>
+                  setNewMessage({ ...newMessage, subject: e.target.value })
+                }
+                placeholder="Subject"
+                required
+              />
+              <textarea
+                value={newMessage.body}
+                onChange={(e) =>
+                  setNewMessage({ ...newMessage, body: e.target.value })
+                }
+                placeholder="Type your message..."
+                required
+              ></textarea>
+              <button type="submit">Send Message</button>
+            </form>
           </div>
         )}
-
-        {/* New Message Form */}
-        <div className="new-message-form">
-          <h3>Compose New Message</h3>
-          <form onSubmit={handleSendMessage}>
-            <select
-              value={newMessage.recipient_id}
-              onChange={(e) =>
-                setNewMessage({ ...newMessage, recipient_id: e.target.value })
-              }
-              required
-            >
-              <option value="">Select Recipient</option>
-              {dentists.map((dentist) => (
-                <option key={dentist.id} value={dentist.user.id}>
-                  {dentist.user.username} ({dentist.specialization})
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              value={newMessage.subject}
-              onChange={(e) =>
-                setNewMessage({ ...newMessage, subject: e.target.value })
-              }
-              placeholder="Subject"
-              required
-            />
-            <textarea
-              value={newMessage.body}
-              onChange={(e) =>
-                setNewMessage({ ...newMessage, body: e.target.value })
-              }
-              placeholder="Type your message..."
-              required
-            ></textarea>
-            <button type="submit">Send Message</button>
-          </form>
-        </div>
       </div>
     </div>
   );

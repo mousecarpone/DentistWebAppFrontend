@@ -1,0 +1,448 @@
+/* Base Styles */
+:root {
+  --sage-green: #c1d7c2;
+  --cream: #f8f7f2;
+  --charcoal: #333333;
+  --light-sage: #dae7db;
+  --dark-sage: #a3c1a5;
+  --light-grey: #e5e5e5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  color: var(--charcoal);
+  background-color: var(--cream);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Nunito", sans-serif;
+  margin-bottom: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: var(--charcoal);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--dark-sage);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--light-grey);
+}
+
+.logo {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--charcoal);
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+}
+
+nav ul li {
+  margin-left: 30px;
+}
+
+nav ul li a {
+  font-weight: 500;
+}
+
+.portal-btn {
+  background-color: var(--sage-green);
+  color: var(--charcoal);
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+}
+
+.portal-btn:hover {
+  background-color: var(--dark-sage);
+  color: white;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 80px 0;
+  background-color: var(--light-sage);
+  border-radius: 15px;
+  margin: 30px 0;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: var(--sage-green);
+  color: var(--charcoal);
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: var(--dark-sage);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dentists Section */
+.dentists {
+  padding: 60px 0;
+  text-align: center;
+}
+
+.dentists h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.dentist-cards {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.dentist-card {
+  background-color: white;
+  border-radius: 15px;
+  padding: 30px;
+  width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.dentist-card:hover {
+  transform: translateY(-5px);
+}
+
+.dentist-image {
+  width: 150px;
+  height: 150px;
+  background-color: var(--light-grey);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+}
+
+.dentist-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+/* Services Section */
+.services {
+  padding: 60px 0;
+  text-align: center;
+  background-color: var(--light-sage);
+  border-radius: 15px;
+}
+
+.services h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.service-item {
+  background-color: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.service-item:hover {
+  transform: translateY(-5px);
+}
+
+.service-item h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+.text-link {
+  color: var(--dark-sage);
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 20px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.text-link:hover {
+  border-color: var(--dark-sage);
+}
+
+/* Footer Styles */
+footer {
+  background-color: var(--sage-green);
+  padding: 50px 0 20px;
+  margin-top: 60px;
+  border-radius: 15px 15px 0 0;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.contact,
+.hours {
+  flex: 1;
+  min-width: 250px;
+}
+
+.copyright {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Login Page Styles */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 40px 0;
+}
+
+.login-container {
+  background-color: white;
+  border-radius: 15px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-container h1 {
+  margin-bottom: 10px;
+}
+
+.login-container p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.login-form {
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--light-grey);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--dark-sage);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.new-patient {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--light-grey);
+}
+
+/* Services Page Styles */
+.services-page {
+  padding: 40px 0;
+}
+
+.services-page h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.intro-text {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 50px;
+  font-size: 1.1rem;
+}
+
+.service-section {
+  margin-bottom: 60px;
+}
+
+.service-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--sage-green);
+}
+
+.service-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.service-info {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.service-info h3 {
+  color: var(--dark-sage);
+  margin-bottom: 15px;
+}
+
+/* Hygiene Page Styles */
+.hygiene-page {
+  padding: 40px 0;
+}
+
+.hygiene-page h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.faq-section {
+  margin: 50px 0;
+}
+
+.faq-item {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.faq-item h2 {
+  font-size: 1.4rem;
+  color: var(--dark-sage);
+  margin-bottom: 15px;
+}
+
+.hygiene-tips {
+  background-color: var(--light-sage);
+  border-radius: 15px;
+  padding: 30px;
+}
+
+.hygiene-tips h2 {
+  margin-bottom: 20px;
+}
+
+.hygiene-tips ul {
+  list-style-position: inside;
+  padding-left: 20px;
+}
+
+.hygiene-tips li {
+  margin-bottom: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  nav {
+    margin-top: 20px;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 10px 0;
+    margin-left: 0;
+  }
+
+  .hero {
+    padding: 50px 20px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .footer-content {
+    flex-direction: column;
+  }
+}
