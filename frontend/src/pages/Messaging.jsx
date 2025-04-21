@@ -11,13 +11,16 @@ import {
   getInboxMessages,
   getMessageById,
   refreshToken,
+  getUserById,
 } from "../api";
+import { jwtDecode } from "jwt-decode";
 
 const Messaging = () => {
   const [messages, setMessages] = useState([]);
   const [inboxMessages, setInboxMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [dentists, setDentists] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [newMessage, setNewMessage] = useState({
     recipient_id: "",
     subject: "",
@@ -31,9 +34,25 @@ const Messaging = () => {
   const [error, setError] = useState("");
   const [view, setView] = useState("inbox");
 
+  const formatDisplayName = (user) => {
+    if (!user) return "Unknown";
+    if (user.id === loggedInUser?.id) return `${user.first_name} ${user.last_name}`;
+    return user.user_type === "dentist"
+      ? `Dr. ${user.last_name || user.username}`
+      : `${user.first_name || ""} ${user.last_name || user.username}`.trim();
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = localStorage.getItem("access");
+        if (token) {
+          const decoded = jwtDecode(token);
+          const userId = decoded.user_id || decoded.id;
+          const userData = await getUserById(userId);
+          setLoggedInUser(userData);
+        }
+
         const dentistsData = await getDentists();
         setDentists(dentistsData);
         const messagesData = await getMessages();
@@ -146,24 +165,14 @@ const Messaging = () => {
 
   return (
     <div className="portal-container">
-      <Sidebar />
+      <Sidebar activePage="messages" />
       <div className="main-content dashboard-content">
         <h1 className="page-title">Messaging</h1>
         {error && <div className="error-message">{error}</div>}
 
         <div className="view-toggle">
-          <button
-            className={view === "inbox" ? "active" : ""}
-            onClick={() => setView("inbox")}
-          >
-            Inbox ({inboxMessages.length})
-          </button>
-          <button
-            className={view === "all" ? "active" : ""}
-            onClick={() => setView("all")}
-          >
-            All Messages
-          </button>
+          <button className={view === "inbox" ? "active" : ""} onClick={() => setView("inbox")}>Inbox ({inboxMessages.length})</button>
+          <button className={view === "all" ? "active" : ""} onClick={() => setView("all")}>All Messages</button>
         </div>
 
         <div className="message-list">
@@ -188,8 +197,8 @@ const Messaging = () => {
                       onClick={() => handleSelectMessage(message)}
                       className={selectedMessage?.id === message.id ? "selected" : ""}
                     >
-                      <td>{message.sender?.username || "Unknown"}</td>
-                      <td>{message.recipient?.username}</td>
+                      <td>{formatDisplayName(message.sender)}</td>
+                      <td>{formatDisplayName(message.recipient)}</td>
                       <td>{message.subject}</td>
                       <td>{formatDate(message.created_at)}</td>
                       <td>{message.is_read ? "Read" : "Unread"}</td>
@@ -199,14 +208,12 @@ const Messaging = () => {
                         <td colSpan={5}>
                           <div className="message-details">
                             <h3>Message Details</h3>
-                            <p><strong>From:</strong> {selectedMessage.sender?.username}</p>
-                            <p><strong>To:</strong> {selectedMessage.recipient?.username}</p>
+                            <p><strong>From:</strong> {formatDisplayName(selectedMessage.sender)}</p>
+                            <p><strong>To:</strong> {formatDisplayName(selectedMessage.recipient)}</p>
                             <p><strong>Subject:</strong> {selectedMessage.subject}</p>
                             <p><strong>Date:</strong> {formatDate(selectedMessage.created_at)}</p>
                             <p><strong>Body:</strong> {selectedMessage.body}</p>
-                            <button onClick={() => handleDeleteMessage(selectedMessage.id)}>
-                              Delete Message
-                            </button>
+                            <button onClick={() => handleDeleteMessage(selectedMessage.id)}>Delete Message</button>
 
                             <div className="reply-form">
                               <h4>Reply</h4>
@@ -254,32 +261,26 @@ const Messaging = () => {
             <form onSubmit={handleSendMessage}>
               <select
                 value={newMessage.recipient_id}
-                onChange={(e) =>
-                  setNewMessage({ ...newMessage, recipient_id: e.target.value })
-                }
+                onChange={(e) => setNewMessage({ ...newMessage, recipient_id: e.target.value })}
                 required
               >
                 <option value="">Select Recipient</option>
                 {dentists.map((dentist) => (
                   <option key={dentist.id} value={dentist.user.id}>
-                    {dentist.user.username} ({dentist.specialization})
+                    Dr. {dentist.user.last_name || dentist.user.username} ({dentist.specialization})
                   </option>
                 ))}
               </select>
               <input
                 type="text"
                 value={newMessage.subject}
-                onChange={(e) =>
-                  setNewMessage({ ...newMessage, subject: e.target.value })
-                }
+                onChange={(e) => setNewMessage({ ...newMessage, subject: e.target.value })}
                 placeholder="Subject"
                 required
               />
               <textarea
                 value={newMessage.body}
-                onChange={(e) =>
-                  setNewMessage({ ...newMessage, body: e.target.value })
-                }
+                onChange={(e) => setNewMessage({ ...newMessage, body: e.target.value })}
                 placeholder="Type your message..."
                 required
               ></textarea>

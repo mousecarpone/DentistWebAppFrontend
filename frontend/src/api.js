@@ -159,46 +159,39 @@ export const deleteDocument = async (id) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MEDICAL HISTORY // MEDICAL HISTORY // MEDICAL HISTORY // MEDICAL HISTORY // MEDICAL HISTORY // MEDICAL HISTORY //
 
-export const getAllMedicalHistory = async () => {
+export const getMyMedicalHistory = async () => {
   const headers = getAuthHeaders();
-  const res = await axios.get(`${API_BASE_URL}/medical-history/`, { headers });
+  const res = await axios.get(`${API_BASE_URL}/medical_history/medical-history/my_history/`, { headers });
   return res.data;
 };
 
-export const getMedicalHistoryById = async (id) => {
+export const getMedicalHistory = async () => {
   const headers = getAuthHeaders();
-  const res = await axios.get(`${API_BASE_URL}/medical-history/${id}/`, { headers });
+  const res = await axios.get(`${API_BASE_URL}/medical_history/medical-history/my_history/`, {
+    headers,
+  });
   return res.data;
+};
+
+
+export const getMedicalHistoryById = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/medical_history/medical-history/${id}/`);
+  return response.data;
 };
 
 export const createMedicalHistory = async (data) => {
-  const headers = {
-    "Content-Type": "application/json",
-    ...getAuthHeaders(),
-  };
-  const res = await axios.post(`${API_BASE_URL}/medical-history/`, data, { headers });
-  return res.data;
+  const response = await axios.post(`${API_BASE_URL}/medical_history/medical-history/`, data);
+  return response.data;
 };
 
 export const updateMedicalHistory = async (id, data) => {
-  const headers = {
-    "Content-Type": "application/json",
-    ...getAuthHeaders(),
-  };
-  const res = await axios.put(`${API_BASE_URL}/medical-history/${id}/`, data, { headers });
-  return res.data;
+  const response = await axios.put(`${API_BASE_URL}/medical_history/medical-history/${id}/`, data);
+  return response.data;
 };
 
 export const deleteMedicalHistory = async (id) => {
-  const headers = getAuthHeaders();
-  const res = await axios.delete(`${API_BASE_URL}/medical-history/${id}/`, { headers });
-  return res.data;
-};
-
-export const getMyMedicalHistory = async () => {
-  const headers = getAuthHeaders();
-  const res = await axios.get(`${API_BASE_URL}/medical-history/my_history/`, { headers });
-  return res.data;
+  const response = await axios.delete(`${API_BASE_URL}/medical_history/medical-history/${id}/`);
+  return response.data;
 };
 
 

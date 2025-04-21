@@ -9,7 +9,7 @@ import AppointmentCreate from "./pages/AppointmentCreate";
 import AppointmentEdit from "./pages/AppointmentEdit";
 import Documents from "./pages/Documents";
 import Messaging from "./pages/Messaging";
-import UserProfile from "./pages/UserProfile";
+import MedicalHistory from "./pages/MedicalHistory";
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
           <Route path="/appointment/edit/:id" element={<AppointmentEdit />} />
           <Route path="/documents" element={<Documents />} />
           <Route path="/inbox" element={<Messaging />} />
-          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/history" element={<MedicalHistory />} />
         </Route>
       </Routes>
     </Router>
