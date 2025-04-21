@@ -106,9 +106,9 @@ function Documents() {
                         </div>
 
                         <div className="form-links">
-                            <a href="/forms/patient-intake.html" target="_blank" rel="noopener noreferrer">Patient Intake Form</a>
-                            <a href="/forms/medical-consent.html" target="_blank" rel="noopener noreferrer">Medical Consent Form</a>
-                            <a href="/forms/insurance-form.html" target="_blank" rel="noopener noreferrer">Insurance Form</a>
+                            <a href="/intake" target="_blank" rel="noopener noreferrer">Patient Intake Form</a>
+                            <a href="/consent" target="_blank" rel="noopener noreferrer">Medical Consent Form</a>
+                            <a href="/insurance" target="_blank" rel="noopener noreferrer">Insurance Form</a>
                         </div>
                     </div>
 

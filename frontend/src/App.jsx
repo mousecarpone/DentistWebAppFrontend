@@ -10,6 +10,9 @@ import AppointmentEdit from "./pages/AppointmentEdit";
 import Documents from "./pages/Documents";
 import Messaging from "./pages/Messaging";
 import MedicalHistory from "./pages/MedicalHistory";
+import IntakeForm from "./pages/IntakeForm";
+import ConsentForm from "./pages/ConsentForm";
+import InsuranceForm from "./pages/InsuranceForm";
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
           <Route path="/documents" element={<Documents />} />
           <Route path="/inbox" element={<Messaging />} />
           <Route path="/history" element={<MedicalHistory />} />
+          <Route path="/intake" element={<IntakeForm />} />
+          <Route path="/consent" element={<ConsentForm />} />
+          <Route path="/insurance" element={<InsuranceForm />} />
         </Route>
       </Routes>
     </Router>
