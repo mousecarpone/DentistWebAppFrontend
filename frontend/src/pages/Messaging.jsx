@@ -7,250 +7,314 @@ import {
   updateMessage,
   deleteMessage,
   replyToMessage,
-  getDentists
+  getDentists,
+  getInboxMessages,
+  getMessageById,
+  refreshToken,
 } from "../api";
+import axios from "axios";
 
-function Messaging() {
+const Messaging = () => {
   const [messages, setMessages] = useState([]);
-  const [selectedDentist, setSelectedDentist] = useState("");
-  const [subject, setSubject] = useState("");
-  const [body, setBody] = useState("");
+  const [inboxMessages, setInboxMessages] = useState([]);
+  const [selectedMessage, setSelectedMessage] = useState(null);
   const [dentists, setDentists] = useState([]);
-  const [expandedMessageId, setExpandedMessageId] = useState(null);
-  const [replyTextMap, setReplyTextMap] = useState({});
+  const [newMessage, setNewMessage] = useState({
+    recipient_id: "",
+    subject: "",
+    body: "",
+  });
+  const [replyMessage, setReplyMessage] = useState({
+    recipient_id: "",
+    subject: "",
+    body: "",
+  });
+  const [error, setError] = useState("");
+  const [view, setView] = useState("inbox"); // "inbox" or "all"
 
+  // Fetch dentists and messages on component mount
   useEffect(() => {
-    fetchMessages();
-    fetchDentists();
+    const fetchData = async () => {
+      try {
+        // Fetch dentists
+        try {
+          const dentistsData = await getDentists();
+          setDentists(dentistsData);
+        } catch (dentistErr) {
+          console.error("Failed to fetch dentists:", dentistErr);
+          setError("Could not load recipient list. Please try again.");
+        }
+
+        // Fetch messages
+        try {
+          const messagesData = await getMessages();
+          setMessages(messagesData);
+        } catch (messagesErr) {
+          console.error("Failed to fetch messages:", messagesErr);
+          setError("Could not load messages. Please try again.");
+        }
+
+        // Fetch inbox messages
+        try {
+          const inboxData = await getInboxMessages();
+          setInboxMessages(inboxData);
+        } catch (inboxErr) {
+          console.error("Failed to fetch inbox messages:", inboxErr);
+          setError("Could not load inbox messages. Please try again.");
+        }
+      } catch (err) {
+        handleError(err);
+      }
+    };
+    fetchData();
   }, []);
 
-  const fetchMessages = async () => {
+  // Handle API errors (e.g., token expiration)
+  const handleError = async (err) => {
+    if (err.response && err.response.status === 401) {
+      try {
+        await refreshToken();
+        // Retry the failed requests
+        const dentistsData = await getDentists();
+        setDentists(dentistsData);
+        const messagesData = await getMessages();
+        setMessages(messagesData);
+        const inboxData = await getInboxMessages();
+        setInboxMessages(inboxData);
+        setError("");
+      } catch (refreshErr) {
+        setError("Session expired. Please log in again.");
+      }
+    } else if (err.code === "ERR_NETWORK") {
+      setError("Cannot connect to the server. Please ensure the backend is running.");
+    } else {
+      setError(err.response?.data?.detail || "An error occurred.");
+    }
+  };
+
+  // Handle selecting a message to view
+  const handleSelectMessage = async (message) => {
     try {
-      const data = await getMessages();
-      setMessages(data);
+      const messageData = await getMessageById(message.id);
+      setSelectedMessage(messageData);
+      // Pre-fill the reply form subject with "Re: [original subject]"
+      setReplyMessage({
+        recipient_id: messageData.sender.id,
+        subject: `Re: ${messageData.subject}`,
+        body: "",
+      });
+      if (!messageData.is_read) {
+        await updateMessage(message.id, { is_read: true });
+        // Refresh messages
+        const messagesData = await getMessages();
+        setMessages(messagesData);
+        const inboxData = await getInboxMessages();
+        setInboxMessages(inboxData);
+      }
     } catch (err) {
-      console.error("Failed to fetch messages:", err);
+      handleError(err);
     }
   };
 
-  const fetchDentists = async () => {
-    try {
-      const dentistData = await getDentists();
-      setDentists(dentistData);
-    } catch (error) {
-      console.error("Failed to fetch dentist list:", error);
-    }
-  };
-
+  // Handle sending a new message
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
-    if (!selectedDentist || !subject || !body) {
-      alert("Please select a dentist, subject, and message body.");
-      return;
-    }
-
     try {
-      const dentistObj = dentists.find((d) => d.id === parseInt(selectedDentist));
-      if (!dentistObj) {
-        alert("Invalid dentist selected.");
-        return;
-      }
+      await sendMessage(newMessage);
+      setNewMessage({ recipient_id: "", subject: "", body: "" });
+      const messagesData = await getMessages();
+      setMessages(messagesData);
+      const inboxData = await getInboxMessages();
+      setInboxMessages(inboxData);
+      setError("");
+    } catch (err) {
+      handleError(err);
+    }
+  };
 
-      const dentistUserId = dentistObj.user.id;
-
-      await sendMessage({
-        recipient_id: dentistUserId,
-        subject,
-        body,
+  // Handle replying to a message
+  const handleReplyMessage = async (e) => {
+    e.preventDefault();
+    try {
+      await replyToMessage(selectedMessage.id, {
+        ...replyMessage,
+        recipient_id: selectedMessage.sender.id, // Use the sender's User ID
       });
-
-      alert("Message sent successfully!");
-      setSelectedDentist("");
-      setSubject("");
-      setBody("");
-
-      fetchMessages();
+      setReplyMessage({ recipient_id: "", subject: "", body: "" });
+      setSelectedMessage(null); // Optionally close the reply section after sending
+      const messagesData = await getMessages();
+      setMessages(messagesData);
+      const inboxData = await getInboxMessages();
+      setInboxMessages(inboxData);
+      setError("");
     } catch (err) {
-      console.error("Failed to send message:", err);
-      alert("Send message failed.");
+      handleError(err);
     }
   };
 
-  const toggleExpand = (msgId) => {
-    setExpandedMessageId((prev) => (prev === msgId ? null : msgId));
-  };
-
-  const markAsRead = async (msg) => {
-    if (msg.is_read) return;
-
+  // Handle deleting a message
+  const handleDeleteMessage = async (messageId) => {
     try {
-      await updateMessage(msg.id, {
-        recipient_id: msg.recipient?.id, 
-        subject: msg.subject,
-        body: msg.body,
-        is_read: false,
-      });
-      fetchMessages();
+      await deleteMessage(messageId);
+      setSelectedMessage(null);
+      setReplyMessage({ recipient_id: "", subject: "", body: "" });
+      const messagesData = await getMessages();
+      setMessages(messagesData);
+      const inboxData = await getInboxMessages();
+      setInboxMessages(inboxData);
+      setError("");
     } catch (err) {
-      console.error("Failed to mark as read:", err);
+      handleError(err);
     }
   };
 
-  const handleDelete = async (msg) => {
-    if (!window.confirm("Are you sure you want to delete this message?")) return;
-
-    try {
-      await deleteMessage(msg.id);
-      alert("Message deleted.");
-      fetchMessages();
-    } catch (err) {
-      console.error("Failed to delete message:", err);
-    }
-  };
-
-  const handleReply = async (msg) => {
-    const replyBody = replyTextMap[msg.id] || "";
-    if (!replyBody) {
-      alert("Please enter a reply message.");
-      return;
-    }
-    try {
-      const recipientId = msg.sender?.id;
-
-      await replyToMessage(msg.id, {
-        subject: `Re: ${msg.subject}`,
-        body: replyBody,
-        recipient_id: recipientId,
-      });
-
-      alert("Reply sent!");
-      setReplyTextMap((prev) => ({ ...prev, [msg.id]: "" }));
-      fetchMessages();
-    } catch (err) {
-      console.error("Failed to send reply:", err);
-    }
-  };
-
-  const renderMessageCard = (msg) => {
-    const isExpanded = expandedMessageId === msg.id;
-    const replyText = replyTextMap[msg.id] || "";
-
-    return (
-      <div className="card" key={msg.id} style={{ marginBottom: "1rem" }}>
-        <p>
-          <strong>Subject:</strong> {msg.subject}, <b>To:</b> {msg.recipient?.username},{" "}
-          <b>Date:</b> {new Date(msg.created_at).toLocaleString()}
-        </p>
-        <button
-          className="link"
-          onClick={() => {
-            toggleExpand(msg.id);
-            markAsRead(msg);
-          }}
-        >
-          {isExpanded ? "Collapse" : "Expand"}
-        </button>
-        {isExpanded && (
-          <div style={{ marginTop: "1rem" }}>
-            <p>{msg.body}</p>
-
-            <div style={{ marginTop: "1rem" }}>
-              <textarea
-                rows="3"
-                placeholder="Type your reply..."
-                value={replyText}
-                onChange={(e) =>
-                  setReplyTextMap((prev) => ({
-                    ...prev,
-                    [msg.id]: e.target.value,
-                  }))
-                }
-              />
-              <button
-                style={{ marginLeft: "10px" }}
-                className="confirm-button"
-                onClick={() => handleReply(msg)}
-              >
-                Send Reply
-              </button>
-            </div>
-
-            <button
-              className="danger-button"
-              style={{ marginTop: "10px" }}
-              onClick={() => handleDelete(msg)}
-            >
-              Delete
-            </button>
-          </div>
-        )}
-      </div>
-    );
+  // Format date for display
+  const formatDate = (dateStr) => {
+    return new Date(dateStr).toLocaleString();
   };
 
   return (
-    <div className="page-container">
-      <Sidebar activePage="messaging" />
-      <div className="dashboard-content">
-        <h1 className="page-title">Messaging</h1>
+    <div className="portal-container">
+      <Sidebar />
+      <div className="main-content">
+        <h2>Messaging</h2>
+        {error && <div className="error-message">{error}</div>}
 
-        <div className="dashboard-sections two-column">
-          <div className="left-column">
-            <div className="card upload-card">
-              <form onSubmit={handleSendMessage}>
-                <label>Select Dentist:</label>
-                <select
-                  value={selectedDentist}
-                  onChange={(e) => setSelectedDentist(e.target.value)}
-                  required
-                >
-                  <option value="">--Choose a Dentist--</option>
-                  {dentists.map((dent) => (
-                    <option key={dent.id} value={dent.id}>
-                      Dr. {dent.user?.last_name}
-                    </option>
-                  ))}
-                </select>
+        {/* View Toggle */}
+        <div className="view-toggle">
+          <button
+            className={view === "inbox" ? "active" : ""}
+            onClick={() => setView("inbox")}
+          >
+            Inbox ({inboxMessages.length})
+          </button>
+          <button
+            className={view === "all" ? "active" : ""}
+            onClick={() => setView("all")}
+          >
+            All Messages
+          </button>
+        </div>
 
-                <label>Subject:</label>
+        {/* Message List */}
+        <div className="message-list">
+          <h3>{view === "inbox" ? "Unread Messages" : "All Messages"}</h3>
+          {messages.length === 0 && view === "all" && <p>No messages available.</p>}
+          {inboxMessages.length === 0 && view === "inbox" && <p>No unread messages.</p>}
+          {(view === "inbox" ? inboxMessages : messages).length > 0 && (
+            <table>
+              <thead>
+                <tr>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Subject</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(view === "inbox" ? inboxMessages : messages).map((message) => (
+                  <tr
+                    key={message.id}
+                    onClick={() => handleSelectMessage(message)}
+                    className={selectedMessage?.id === message.id ? "selected" : ""}
+                  >
+                    <td>{message.sender?.username || "Unknown"}</td>
+                    <td>{message.recipient?.username}</td>
+                    <td>{message.subject}</td>
+                    <td>{formatDate(message.created_at)}</td>
+                    <td>{message.is_read ? "Read" : "Unread"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        {/* Message Details */}
+        {selectedMessage && (
+          <div className="message-details">
+            <h3>Message Details</h3>
+            <p><strong>From:</strong> {selectedMessage.sender?.username}</p>
+            <p><strong>To:</strong> {selectedMessage.recipient?.username}</p>
+            <p><strong>Subject:</strong> {selectedMessage.subject}</p>
+            <p><strong>Date:</strong> {formatDate(selectedMessage.created_at)}</p>
+            <p><strong>Body:</strong> {selectedMessage.body}</p>
+            <button onClick={() => handleDeleteMessage(selectedMessage.id)}>
+              Delete Message
+            </button>
+
+            {/* Reply Form */}
+            <div className="reply-form">
+              <h4>Reply</h4>
+              <form onSubmit={handleReplyMessage}>
                 <input
                   type="text"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
+                  value={replyMessage.subject}
+                  onChange={(e) =>
+                    setReplyMessage({
+                      ...replyMessage,
+                      subject: e.target.value,
+                    })
+                  }
+                  placeholder="Subject"
                   required
                 />
-
-                <label>Message Body:</label>
                 <textarea
-                  rows="3"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
+                  value={replyMessage.body}
+                  onChange={(e) =>
+                    setReplyMessage({ ...replyMessage, body: e.target.value })
+                  }
+                  placeholder="Type your reply..."
                   required
-                />
-
-                <button
-                  type="submit"
-                  className="confirm-button"
-                  style={{ marginTop: "10px" }}
-                >
-                  Send
-                </button>
+                ></textarea>
+                <button type="submit">Send Reply</button>
               </form>
             </div>
           </div>
+        )}
 
-          <div className="right-column">
-            {messages && messages.length > 0 ? (
-              messages.map((msg) => renderMessageCard(msg))
-            ) : (
-              <p>No messages found.</p>
-            )}
-          </div>
+        {/* New Message Form */}
+        <div className="new-message-form">
+          <h3>Compose New Message</h3>
+          <form onSubmit={handleSendMessage}>
+            <select
+              value={newMessage.recipient_id}
+              onChange={(e) =>
+                setNewMessage({ ...newMessage, recipient_id: e.target.value })
+              }
+              required
+            >
+              <option value="">Select Recipient</option>
+              {dentists.map((dentist) => (
+                <option key={dentist.id} value={dentist.user.id}>
+                  {dentist.user.username} ({dentist.specialization})
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              value={newMessage.subject}
+              onChange={(e) =>
+                setNewMessage({ ...newMessage, subject: e.target.value })
+              }
+              placeholder="Subject"
+              required
+            />
+            <textarea
+              value={newMessage.body}
+              onChange={(e) =>
+                setNewMessage({ ...newMessage, body: e.target.value })
+              }
+              placeholder="Type your message..."
+              required
+            ></textarea>
+            <button type="submit">Send Message</button>
+          </form>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Messaging;

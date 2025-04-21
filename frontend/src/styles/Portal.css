@@ -1,259 +1,141 @@
-body {
-    transition: opacity 0.5s ease-in-out;
-}
-
-body.fade-out {
-    opacity: 0;
-}
-
-.page-container {
+/* src/styles/Portal.css */
+.portal-container {
     display: flex;
-    height: 100vh;
-    width: 100vw;
-    font-family: 'Lato', sans-serif;
-    background-color: #F4F3EF; 
-}
-
-.dashboard-content, .content {
-    flex: 1;
-    padding: 40px;
-    overflow-y: auto;
-}
-
-.page-title {
-    font-family: 'Nunito', sans-serif;
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: left; 
-    max-width: 1200px; 
-    margin-left: auto; 
-    margin-right: auto;
-}
-
-.dashboard-sections, .doctor-selection, .availability-grid, .reason-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-    align-items: stretch; 
-    max-width: 1200px; 
-    margin: 0 auto; 
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center;
-    background: #E0DFDB; 
+    min-height: 100vh;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color: #f8f9fa;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.appointment-details {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 10px;
-    width: 100%;
-    text-align: center;
-}
-
-.action img {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 8px;
-}
-
-.profile-pic {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
-
-.link {
-    display: block;
-    color: #627761;
-    font-weight: bold;
-    text-decoration: none;
-    margin-top: 10px;
-}
-
-.link:hover {
-    text-decoration: underline;
-}
-
-button, .confirm-button {
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-button:hover, .confirm-button:hover {
-    transform: scale(1.05);
-}
-
-@media (max-width: 768px) {
-    .dashboard-content, .content {
-        padding: 20px;
-    }
-
-    .page-title {
-        font-size: 26px;
-    }
-
-    .dashboard-sections, .doctor-selection, .availability-grid, .reason-list {
-        grid-template-columns: 1fr;
-    }
-}
-
-.toast-notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #323232;
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 9999;
-    animation: fadeIn 0.3s ease-in-out;
-    font-size: 16px;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.appointment-info-grid {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    row-gap: 6px;
-    column-gap: 12px;
-    margin-bottom: 1rem;
-    font-size: 15px;
-}
-
-.profile-container {
-    max-width: 600px;
-}
+    border-right: 1px solid #ddd;
+    flex-shrink: 0;
+  }
   
-.profile-row {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0;
-    align-items: center;
-}
-  
-.field-display {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-  
-.edit-icon {
-    color: #555;
-    font-size: 14px;
-    margin-left: 5px;
-}
-
-.two-column {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: flex-start;
-}
-
-.left-column {
+  .main-content {
     flex: 1;
-    max-width: 300px;
-}
-  
-.right-column {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-  
-.document-entry {
-    background: #f4f3ef;
-    border-radius: 8px;
-    padding: 10px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'Lato', sans-serif;
-    box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-}
-  
-.document-entry span {
-    font-size: 14px;
-    color: #4e5347;
-    margin-right: 16px;
-    white-space: nowrap;
-}
-  
-.document-entry a {
-    color: #6e7564;
-    text-decoration: underline;
-    font-weight: bold;
-    font-size: 14px;
-}
-  
-.document-entry a:hover {
-    color: #3d4237;
-    text-decoration: none;
-}
-
-.upload-card form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.form-links {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-links a {
-  color: #6E7564;
-  text-decoration: underline;
-  font-size: 14px;
-}
-
-select {
-    background-color: #f4f3ef;
-    color: #4e5347;
-    border: 1px solid #d6c3a3;
-    border-radius: 6px;
-    padding: 10px 12px;
-    font-size: 14px;
-    font-family: 'Lato', sans-serif;
-    appearance: none;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
-}
-  
-select:hover, select:focus {
-    border-color: #b8a77e;
-    box-shadow: 0 0 0 2px rgba(182, 164, 122, 0.2);
-}
-  
-select option {
+    padding: 20px;
     background-color: #fff;
-    color: #4e5347;
-}
+    overflow-y: auto;
+  }
   
+  .error-message {
+    color: red;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+  }
+  
+  .view-toggle {
+    margin-bottom: 20px;
+  }
+  
+  .view-toggle button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #e9ecef;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .view-toggle .active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .message-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .message-list th,
+  .message-list td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .message-list th {
+    background-color: #f1f3f5;
+  }
+  
+  .message-list tr:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+  
+  .message-list .selected {
+    background-color: #e0f7fa;
+  }
+  
+  .message-details {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .message-details p {
+    margin: 5px 0;
+  }
+  
+  .message-details button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .message-details button:hover {
+    background-color: #c82333;
+  }
+  
+  .new-message-form,
+  .reply-form {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .new-message-form select,
+  .new-message-form input,
+  .new-message-form textarea,
+  .reply-form input,
+  .reply-form textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .new-message-form textarea,
+  .reply-form textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .new-message-form button,
+  .reply-form button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .new-message-form button:hover,
+  .reply-form button:hover {
+    background-color: #0056b3;
+  }
