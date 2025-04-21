@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FaTachometerAlt, FaCalendarAlt, FaMoneyBill, FaFolderOpen, FaComments, FaUserCog, FaSignOutAlt } from "react-icons/fa";
 import { getUserById } from "../api"; 
 import { jwtDecode } from "jwt-decode";
+import ProfileModal from "./ProfileModal"; // adjust path
 import "../styles/Sidebar.css";
 
 function Sidebar({ activePage }) {
