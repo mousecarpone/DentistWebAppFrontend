@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
+import AutoExpandTextarea from "../components/AutoExpandTextarea";
+import FormInput from "../components/FormInput";
+import FormTextarea from "../components/FormTextarea";
 import "../styles/Portal.css";
 import {
   getMessages,
@@ -7,7 +10,7 @@ import {
   updateMessage,
   deleteMessage,
   replyToMessage,
-  getDentists
+  getDentists,
 } from "../api";
 
 function Messaging() {
@@ -44,7 +47,6 @@ function Messaging() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
     if (!selectedDentist || !subject || !body) {
       alert("Please select a dentist, subject, and message body.");
       return;
@@ -59,17 +61,12 @@ function Messaging() {
 
       const dentistUserId = dentistObj.user.id;
 
-      await sendMessage({
-        recipient_id: dentistUserId,
-        subject,
-        body,
-      });
+      await sendMessage({ recipient_id: dentistUserId, subject, body });
 
       alert("Message sent successfully!");
       setSelectedDentist("");
       setSubject("");
       setBody("");
-
       fetchMessages();
     } catch (err) {
       console.error("Failed to send message:", err);
@@ -83,10 +80,9 @@ function Messaging() {
 
   const markAsRead = async (msg) => {
     if (msg.is_read) return;
-
     try {
       await updateMessage(msg.id, {
-        recipient_id: msg.recipient?.id, 
+        recipient_id: msg.recipient?.id,
         subject: msg.subject,
         body: msg.body,
         is_read: false,
@@ -99,7 +95,6 @@ function Messaging() {
 
   const handleDelete = async (msg) => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
-
     try {
       await deleteMessage(msg.id);
       alert("Message deleted.");
@@ -117,13 +112,11 @@ function Messaging() {
     }
     try {
       const recipientId = msg.sender?.id;
-
       await replyToMessage(msg.id, {
         subject: `Re: ${msg.subject}`,
         body: replyBody,
         recipient_id: recipientId,
       });
-
       alert("Reply sent!");
       setReplyTextMap((prev) => ({ ...prev, [msg.id]: "" }));
       fetchMessages();
@@ -137,52 +130,44 @@ function Messaging() {
     const replyText = replyTextMap[msg.id] || "";
 
     return (
-      <div className="card" key={msg.id} style={{ marginBottom: "1rem" }}>
-        <p>
-          <strong>Subject:</strong> {msg.subject}, <b>To:</b> {msg.recipient?.username},{" "}
-          <b>Date:</b> {new Date(msg.created_at).toLocaleString()}
-        </p>
-        <button
-          className="link"
-          onClick={() => {
-            toggleExpand(msg.id);
-            markAsRead(msg);
-          }}
-        >
-          {isExpanded ? "Collapse" : "Expand"}
-        </button>
-        {isExpanded && (
-          <div style={{ marginTop: "1rem" }}>
-            <p>{msg.body}</p>
+      <div className={`card message-card ${isExpanded ? "expanded" : ""}`} key={msg.id}>
+        <div className="message-header">
+          <div className="message-header-info">
+            <p><strong>Subject:</strong> {msg.subject}</p>
+            <p><strong>To:</strong> {msg.recipient?.username}</p>
+            <p><strong>Date:</strong> {new Date(msg.created_at).toLocaleString()}</p>
+          </div>
+          <button
+            className="expand-button"
+            onClick={() => {
+              toggleExpand(msg.id);
+              markAsRead(msg);
+            }}
+          >
+            {isExpanded ? "−" : "+"}
+          </button>
+        </div>
 
-            <div style={{ marginTop: "1rem" }}>
-              <textarea
-                rows="3"
-                placeholder="Type your reply..."
+        {isExpanded && (
+          <div className="message-body">
+            <p>{msg.body}</p>
+            <div className="reply-section">
+              <AutoExpandTextarea
                 value={replyText}
                 onChange={(e) =>
-                  setReplyTextMap((prev) => ({
-                    ...prev,
-                    [msg.id]: e.target.value,
-                  }))
+                  setReplyTextMap((prev) => ({ ...prev, [msg.id]: e.target.value }))
                 }
+                placeholder="Type your reply..."
               />
-              <button
-                style={{ marginLeft: "10px" }}
-                className="confirm-button"
-                onClick={() => handleReply(msg)}
-              >
-                Send Reply
-              </button>
+              <div className="reply-buttons">
+                <button className="confirm-button" onClick={() => handleReply(msg)}>
+                  Send Reply
+                </button>
+                <button className="danger-button" onClick={() => handleDelete(msg)}>
+                  Delete
+                </button>
+              </div>
             </div>
-
-            <button
-              className="danger-button"
-              style={{ marginTop: "10px" }}
-              onClick={() => handleDelete(msg)}
-            >
-              Delete
-            </button>
           </div>
         )}
       </div>
@@ -194,52 +179,42 @@ function Messaging() {
       <Sidebar activePage="messaging" />
       <div className="dashboard-content">
         <h1 className="page-title">Messaging</h1>
-
         <div className="dashboard-sections two-column">
           <div className="left-column">
             <div className="card upload-card">
               <form onSubmit={handleSendMessage}>
-                <label>Select Dentist:</label>
-                <select
-                  value={selectedDentist}
-                  onChange={(e) => setSelectedDentist(e.target.value)}
-                  required
-                >
-                  <option value="">--Choose a Dentist--</option>
-                  {dentists.map((dent) => (
-                    <option key={dent.id} value={dent.id}>
-                      Dr. {dent.user?.last_name}
-                    </option>
-                  ))}
-                </select>
-
-                <label>Subject:</label>
-                <input
-                  type="text"
+                <div className="form-control">
+                  <label>Select Dentist:</label>
+                  <select
+                    className="form-input"
+                    value={selectedDentist}
+                    onChange={(e) => setSelectedDentist(e.target.value)}
+                    required
+                  >
+                    <option value="">--Choose a Dentist--</option>
+                    {dentists.map((dent) => (
+                      <option key={dent.id} value={dent.id}>
+                        Dr. {dent.user?.last_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <FormInput
+                  label="Subject:"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  required
                 />
-
-                <label>Message Body:</label>
-                <textarea
-                  rows="3"
+                <FormTextarea
+                  label="Message Body:"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
-                  required
                 />
-
-                <button
-                  type="submit"
-                  className="confirm-button"
-                  style={{ marginTop: "10px" }}
-                >
+                <button type="submit" className="confirm-button" style={{ marginTop: "10px" }}>
                   Send
                 </button>
               </form>
             </div>
           </div>
-
           <div className="right-column">
             {messages && messages.length > 0 ? (
               messages.map((msg) => renderMessageCard(msg))
