@@ -804,6 +804,9 @@ margin-top: 24px;
   font-size: 1em;
 }
 
+/*##########################################################################################################
+DOCUMENT CARDS // DOCUMENT CARDS // DOCUMENT CARDS // DOCUMENT CARDS // DOCUMENT CARDS // DOCUMENT CARDS */
+
 .card {
   display: flex;
   flex-direction: column;
@@ -823,21 +826,6 @@ margin-top: 24px;
   margin-bottom: 0.5rem;
 }
 
-
-.delete-icon {
-  background: none;
-  border: none;
-  color: #aa0000;
-  font-size: 1.1rem;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-}
-
-.delete-icon:hover {
-  color: #ff0000;
-}
-
 .document-card {
   display: flex;
   flex-direction: column;
@@ -854,13 +842,7 @@ margin-top: 24px;
   width: 100%;
 }
 
-.doc-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.document-link {
+.text-link {
   background: none;
   border: none;
   color: #4e5347;
@@ -871,130 +853,8 @@ margin-top: 24px;
   padding: 0;
 }
 
-.document-link:hover {
+.text-link:hover {
   text-decoration: none;
   opacity: 0.8;
 }
 
-.delete-icon {
-  background: none;
-  border: none;
-  color: #aa0000;
-  font-size: 1.1rem;
-  cursor: pointer;
-  padding: 0;
-}
-
-.delete-icon:hover {
-  color: #ff0000;
-}
-.doc-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.doc-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.doc-title {
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0;
-  color: #3e3f3a;
-}
-
-.doc-date {
-  font-size: 13px;
-  color: #666;
-  margin: 0;
-}
-
-.document-link {
-  background: none;
-  border: none;
-  color: #4e5347;
-  text-decoration: underline;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-}
-
-.document-link:hover {
-  text-decoration: none;
-  opacity: 0.8;
-}
-
-.delete-icon {
-  background: none;
-  border: none;
-  color: #aa0000;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0;
-  margin-left: auto;
-}
-
-.delete-icon:hover {
-  color: #ff0000;
-}
-.doc-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.doc-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.doc-title {
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0;
-  color: #3e3f3a;
-}
-
-.doc-date {
-  font-size: 13px;
-  color: #666;
-  margin: 0;
-}
-
-.document-link {
-  background: none;
-  border: none;
-  color: #4e5347;
-  text-decoration: underline;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-}
-
-.document-link:hover {
-  text-decoration: none;
-  opacity: 0.8;
-}
-
-.delete-icon {
-  background: none;
-  border: none;
-  color: #aa0000;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0;
-  margin-left: auto;
-}
-
-.delete-icon:hover {
-  color: #ff0000;
-}

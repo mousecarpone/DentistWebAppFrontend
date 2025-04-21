@@ -122,7 +122,7 @@ function Documents() {
             <p style={{ margin: "4px 0" }}>Uploaded: {new Date(doc.upload_date).toLocaleDateString()}</p>
             <button
               type="button"
-              className="document-link"
+              className="text-link"
               onClick={() => window.open(getDocURL(doc.document_file), "_blank")}
             >
               View Document
@@ -130,7 +130,7 @@ function Documents() {
           </div>
           <button
             onClick={() => handleDelete(doc.id)}
-            className="document-link"
+            className="text-link"
             title="Delete Document"
           >
             delete
