@@ -1,3 +1,13 @@
+.page-fade {
+  opacity: 0;
+  animation: fadeIn 300ms ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
 body {
   margin: 0;
   padding: 0;

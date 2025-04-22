@@ -2,12 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Portal.css";
 import "../../styles/Index.css";
+import Footer from "../../components/Footer";
 
 function AdditionalInfo() {
   const navigate = useNavigate();
 
   return (
-    <div className="main-container">
+    <div className="main-container" page-fade>
 
       <header className="top-header">
         <div className="clinic-name">San Diego Dental Studio</div>
@@ -45,9 +46,7 @@ function AdditionalInfo() {
         <p className="italics">Your Smile. Our Mission.</p>
       </section>
 
-      <footer className="footer">
-        <p>© 2025 San Diego Dental Studio. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }
