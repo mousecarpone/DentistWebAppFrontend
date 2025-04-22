@@ -1,5 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import OurPractice from "./pages/index/OurPractice";
+import CommunityOutreach from "./pages/index/CommunityOutreach";
+import Services from "./pages/index/services";
+import Technology from "./pages/index/Technology";
+import AdditionalInfo from "./pages/index/AdditionalInfo";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
@@ -19,6 +24,11 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/our-practice" element={<OurPractice />} />
+        <Route path="/community-outreach" element={<CommunityOutreach />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/additional-info" element={<AdditionalInfo />} />
+        <Route path="/technology" element={<Technology />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected route wrapper */}
