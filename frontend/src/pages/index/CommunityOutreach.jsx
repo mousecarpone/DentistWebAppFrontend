@@ -8,7 +8,7 @@ function CommunityOutreach() {
   const navigate = useNavigate();
 
   return (
-    <div className="main-container" page-fade>
+    <div className="main-container">
 
       <header className="top-header">
         <div className="clinic-name">San Diego Dental Studio</div>
