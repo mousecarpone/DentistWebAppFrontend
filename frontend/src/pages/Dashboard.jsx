@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar";
+import ResponsiveSidebar from "../components/ResponsiveSidebar";
 import "../styles/Portal.css";
 import { getUpcomingAppointments, getNotifications, getDentists } from "../api";
 
@@ -59,7 +59,7 @@ function Dashboard() {
 
     return (
         <div className="page-container">
-            <Sidebar activePage="dashboard" />
+            <ResponsiveSidebar activePage="dashboard" />
             <div className="dashboard-content">
                 <h1 className="page-title">Dashboard</h1>
 

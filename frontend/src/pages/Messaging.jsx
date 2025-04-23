@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
+import ResponsiveSidebar from "../components/ResponsiveSidebar";
 import "../styles/Portal.css";
 import {
   getMessages,
@@ -185,7 +185,7 @@ const Messaging = () => {
 
   return (
     <div className="portal-container">
-      <Sidebar activePage="messages" />
+      <ResponsiveSidebar activePage="messages" />
       <div className="main-content dashboard-content">
         <h1 className="page-title">Messaging</h1>
         {error && <div className="error-message">{error}</div>}
