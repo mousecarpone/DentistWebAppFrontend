@@ -241,4 +241,17 @@ body.fade-out {
   font-weight: bold;
   font-size: 1.2rem;
 }
+.nav-button {
+  background: none;
+  border: none;
+  font-weight: normal;
+  color: #444;
+  cursor: pointer;
+  padding: 10px 15px;
+}
+
+.nav-button.active {
+  font-weight: bold;
+  color: #4b7155; 
+} 
 
