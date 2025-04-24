@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/Portal.css";
 import "../../styles/OurPractice.css";
 import Footer from "../../components/Footer";
-import IndexNavBar from "../../components/IndexNavBar";
+import IndexResponsiveSidebar from "../../components/IndexResponsiveSidebar";
 
 function Profile({ name, title, photo, sections }) {
   return (
@@ -35,7 +35,7 @@ function OurPractice() {
         </button>
       </header>
 
-      <IndexNavBar />
+      <IndexResponsiveSidebar activePage="our-practice" />
 
       <section className="content-section">
       <h2>About Our Practice</h2>

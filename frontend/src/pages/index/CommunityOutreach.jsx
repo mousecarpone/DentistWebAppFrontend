@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/Portal.css";
 import "../../styles/Index.css";
 import Footer from "../../components/Footer";
-import IndexNavBar from "../../components/IndexNavBar";
+import IndexResponsiveSidebar from "../../components/IndexResponsiveSidebar";
 
 function CommunityOutreach() {
   const navigate = useNavigate();
@@ -19,9 +19,7 @@ function CommunityOutreach() {
         </button>
       </header>
 
-     
-
-      <IndexNavBar />
+      <IndexResponsiveSidebar activePage="community-outreach" />
 
       <section className="content-section">
         <h2>Welcome to San Diego Dental Studio in San Diego, CA</h2>

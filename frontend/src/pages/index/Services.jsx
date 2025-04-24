@@ -2,8 +2,8 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/Portal.css";
 import "../../styles/Index.css";
-import Footer from "../Index/components/components/Footer";
-import IndexNavBar from "../pages/Index/components/IndexNavbar";
+import Footer from "../../components/Footer";
+import IndexResponsiveSidebar from "../../components/IndexResponsiveSidebar";
 
 function Services() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function Services() {
         </button>
       </header>
 
-      <IndexNavBar />
+      <IndexResponsiveSidebar activePage="services" />
 
       <section className="content-section">
         <h2>Welcome to San Diego Dental Studio in San Diego, CA</h2>

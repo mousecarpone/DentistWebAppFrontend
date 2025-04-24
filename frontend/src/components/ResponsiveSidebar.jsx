@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import MobileSidebar from "./MobileSidebar";
-import useIsMobile from "./useIsMobile"; // adjust path if needed
+import useIsMobile from "../components/UseIsMobile"; // adjust path if needed
 
 function ResponsiveSidebar({ activePage }) {
   const isMobile = useIsMobile();

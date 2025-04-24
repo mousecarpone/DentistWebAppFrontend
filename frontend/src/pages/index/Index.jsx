@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/Portal.css";
 import "../../styles/Index.css";
 import Footer from "../../components/Footer";
-import IndexNavBar from "../../components/IndexNavBar";
+import IndexResponsiveSidebar from "../../components/IndexResponsiveSidebar";
 
 function Index() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function Index() {
         </button>
       </header>
 
-      <IndexNavBar />
+      <IndexResponsiveSidebar activePage="index" />
 
       <div className="hero-container">
         <div className="hero-overlay" />

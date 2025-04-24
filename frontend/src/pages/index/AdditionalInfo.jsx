@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/Portal.css";
 import "../../styles/Index.css";
 import Footer from "../../components/Footer";
-import IndexNavBar from "../../components/IndexNavBar";
+import IndexResponsiveSidebar from "../../components/IndexResponsiveSidebar";
 
 function FAQItem({ question, answer }) {
   const [open, setOpen] = useState(false);
@@ -60,7 +60,7 @@ function AdditionalInfo() {
         </button>
       </header>
 
-      <IndexNavBar />
+      <IndexResponsiveSidebar activePage="additional-info" />
 
       <section className="content-section">
         <h2>Frequently Asked Questions</h2>

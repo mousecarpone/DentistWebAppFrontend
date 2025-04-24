@@ -1,17 +1,15 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../styles/Index.css";
+import "../styles/Index.css"; 
+import "../styles/Sidebar.css"; 
 
-function IndexNavBar() {
+function NavBar() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/our-practice", label: "Our Practice" },
-    { path: "/community-outreach", label: "Community Outreach" },
-    { path: "/services", label: "Dental Services" },
-    { path: "/technology", label: "Technology" },
     { path: "/additional-info", label: "Additional Info" },
   ];
 
@@ -30,4 +28,5 @@ function IndexNavBar() {
   );
 }
 
-export default IndexNavBar;
+export default NavBar;
+

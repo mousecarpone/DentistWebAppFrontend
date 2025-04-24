@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/Portal.css";
 import "../../styles/Index.css";
 import Footer from "../../components/Footer";
-import IndexNavBar from "../../components/IndexNavBar";
+import IndexResponsiveSidebar from "../../components/IndexResponsiveSidebar";
 
 function Technology() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function Technology() {
         </button>
       </header>
 
-      <IndexNavBar />
+      <IndexResponsiveSidebar activePage="additional-info" />
 
       <section className="content-section">
         <h2>Welcome to San Diego Dental Studio in San Diego, CA</h2>
