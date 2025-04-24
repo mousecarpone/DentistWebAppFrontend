@@ -2,7 +2,8 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/Portal.css";
 import "../../styles/Index.css";
-import Footer from "../../components/Footer";
+import Footer from "../Index/components/components/Footer";
+import IndexNavBar from "../pages/Index/components/IndexNavbar";
 
 function Services() {
   const navigate = useNavigate();
@@ -18,40 +19,7 @@ function Services() {
         </button>
       </header>
 
-     
-
-      <nav className="main-nav">
-      <button 
-          onClick={() => navigate("/")} 
-          className={location.pathname === "/" ? "nav-button active" : "nav-button"}>
-          Home
-        </button>
-        <button 
-          onClick={() => navigate("/our-practice")} 
-          className={location.pathname === "/our-practice" ? "nav-button active" : "nav-button"}>
-          Our Practice
-        </button>
-        <button 
-          onClick={() => navigate("/community-outreach")} 
-          className={location.pathname === "/community-outreach" ? "nav-button active" : "nav-button"}>
-          Community Outreach
-        </button>
-        <button 
-          onClick={() => navigate("/services")} 
-          className={location.pathname === "/services" ? "nav-button active" : "nav-button"}>
-          Dental Services
-        </button>
-        <button 
-          onClick={() => navigate("/technology")} 
-          className={location.pathname === "/technology" ? "nav-button active" : "nav-button"}>
-          Technology
-        </button>
-        <button 
-          onClick={() => navigate("/additional-info")} 
-          className={location.pathname === "/additional-info" ? "nav-button active" : "nav-button"}>
-          Additional Info
-        </button>
-      </nav>
+      <IndexNavBar />
 
       <section className="content-section">
         <h2>Welcome to San Diego Dental Studio in San Diego, CA</h2>
